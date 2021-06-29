@@ -1,6 +1,4 @@
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Random;
+import java.util.*;
 
 public class AlgorithmsAndDataStructures {
 
@@ -67,13 +65,13 @@ public class AlgorithmsAndDataStructures {
         System.out.println("\nЗадание 2.1");
 
         Random randomizer = new Random();
-        int[] ints = new int[30];
+        Integer[] ints = new Integer[30];
         for (int i = 0; i < ints.length; i++) {
             ints[i] = randomizer.nextInt(100);
         }
         System.out.println(Arrays.toString(ints));
         timer.start();
-        int[] intsCopy = Arrays.copyOf(ints, ints.length);
+        Integer[] intsCopy = Arrays.copyOf(ints, ints.length);
         System.out.println("It took " + timer.fix() + " nanoseconds");
         timer.start();
         System.out.println("Arrays is " + (Arrays.equals(ints, intsCopy) ? "" : "not") + " equals");
@@ -181,6 +179,73 @@ public class AlgorithmsAndDataStructures {
         timer.start();
         insertionSort(bigIntsCopy);
         System.out.println("Insertion sort method took " + timer.fix() + " nanoseconds");
+
+        /**
+         * Задание 3.1
+         * На основе массива из домашнего задания 2.1 реализуйте простой список и коллекцию.
+         * Оцените время выполнения преобразования.
+         */
+        System.out.println("\nЗадание 3.1");
+        timer.start();
+        ArrayList<Integer> arrayList = new ArrayList<>(Arrays.asList(ints));
+        System.out.println("Converting to a list takes " + timer.fix() + " nanoseconds");
+
+        /**
+         * Задание 3.2
+         * На основе списка из задания 3.1 реализуйте основные методы добавления,
+         * удаления и получения объекта или элемента из списка.
+         * Оценить выполненные методы с помощью базового класса System.nanoTime().
+         */
+        System.out.println("\nЗадание 3.2");
+        timer.start();
+        arrayList.add(5);
+        System.out.println("Adding an item to the list takes " + timer.fix() + " nanoseconds");
+
+        timer.start();
+        arrayList.remove(arrayList.size() - 1);
+        System.out.println("Removing an item to the list takes " + timer.fix() + " nanoseconds");
+
+        timer.start();
+        arrayList.get(arrayList.size() - 1);
+        System.out.println("Getting list item takes " + timer.fix() + " nanoseconds");
+
+        /**
+         * Задание 3.3
+         * Реализуйте простой односвязный список и его базовые методы.
+         */
+        System.out.println("\nЗадание 3.3");
+        SingleLinkedList singleLinkedList = new SingleLinkedList<Integer>();
+        singleLinkedList.insert(5);
+        singleLinkedList.insert(10);
+        singleLinkedList.display();
+
+        /**
+         * Задание 3.4
+         * На основе списка из задания 3.1 реализуйте простой двусторонний список и его базовые методы.
+         * Реализуйте список заполненный объектами из вашего класса из задания 1.3
+         */
+        List linkedList = new LinkedList(arrayList);
+
+        List<Object> linkedListWithObjects = new LinkedList<>();
+        linkedListWithObjects.add(letter);
+        linkedListWithObjects.add(array);
+        linkedListWithObjects.add(myType);
+
+        /**
+         * Задание 3.5
+         * Реализуйте итератор на основе связанных списков из задания 3.4 и выполните базовые операции итератора.
+         * Оцените время выполнения операций с помощью базового метода System.nanoTime()
+         */
+        System.out.println("\nЗадание 3.5");
+        Iterator iterator = linkedListWithObjects.iterator();
+
+        timer.start();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
+        System.out.println("Loop traversal for " + linkedListWithObjects.size() + " elements using an iterator " +
+                "takes " + timer.fix() + " nanoseconds");
+        iterator.remove();
     }
 
     public static class NewType {
@@ -278,4 +343,70 @@ public class AlgorithmsAndDataStructures {
         }
 
     }
+
+    static class Link<T> {
+        private T link;
+        private Link<T> next;
+
+        public Link(T link) {
+            this.link = link;
+        }
+
+        public Link<T> getNext() {
+            return next;
+        }
+
+        public void setNext(Link<T> next) {
+            this.next = next;
+        }
+
+        public T getValue() {
+            return link;
+        }
+    }
+
+    static class SingleLinkedList<T> {
+        private Link<T> first;
+
+        public SingleLinkedList() {
+            first = null;
+        }
+
+        public boolean isEmpty() {
+            return (first == null);
+        }
+
+        public void insert(T link) {
+            Link<T> l = new Link<>(link);
+            l.setNext(first);
+            this.first = l;
+        }
+
+        public Link<T> delete() {
+            Link<T> temp = first;
+            first = first.getNext();
+            return temp;
+        }
+
+        public void display() {
+            Link<T> current = first;
+            while (current != null) {
+                System.out.println(current.getValue());
+                current = current.getNext();
+            }
+        }
+
+        public T find(T searchNode) {
+            Link<T> findNode = new Link<>(searchNode);
+            Link<T> current = first;
+            while (current != null) {
+                if (current.getValue().equals(findNode.getValue())) {
+                    return findNode.getValue();
+                }
+                current = current.getNext();
+            }
+            return null;
+        }
+    }
+
 }
