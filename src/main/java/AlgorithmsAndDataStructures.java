@@ -246,6 +246,192 @@ public class AlgorithmsAndDataStructures {
         System.out.println("Loop traversal for " + linkedListWithObjects.size() + " elements using an iterator " +
                 "takes " + timer.fix() + " nanoseconds");
         iterator.remove();
+
+        /**
+         * Задание 4.1
+         * На основе данных объектного списка из задания 3.4 реализуйте
+         * простой стек и его базовые методы.
+         * Оцените время выполнения операций с помощью базового метода
+         * System.nanoTime().
+         */
+
+        linkedListWithObjects.add(new Object());
+
+        System.out.println("\nЗадание 4.1");
+        timer.start();
+        StackM<Object> myStack = new StackM<>(linkedListWithObjects.size());
+        System.out.println("My stack for " + linkedListWithObjects.size() + " elements was created in "
+                + timer.fix() + " nanoseconds");
+
+        timer.start();
+        for (int i = 0; i < linkedListWithObjects.size(); i++) {
+            if (myStack.isFull()) break;
+            myStack.push(linkedListWithObjects.get(i));
+        }
+        System.out.println("Inserting " + myStack.size() + " items into my stack takes "
+                + timer.fix() + " nanoseconds");
+
+        timer.start();
+        myStack.peek();
+        System.out.println("Viewing one item in my stack takes "
+                + timer.fix() + " nanoseconds");
+
+        int size = myStack.size();
+        timer.start();
+        while (!myStack.isEmpty()) {
+            myStack.pop();
+        }
+        System.out.println("Deleting " + size + " items from my stack takes "
+                + timer.fix() + " nanoseconds");
+
+        /**
+         * Задание 4.2
+         * На основе данных объектного списка из задания 3.4 реализуйте
+         * простую очередь и его базовые методы.
+         * Реализуйте вспомогательные методы.
+         * Оцените время выполнения операций с помощью базового метода
+         * System.nanoTime().
+         */
+        System.out.println("\nЗадание 4.2");
+        timer.start();
+        QueueM<Object> queueM = new QueueM<>(linkedListWithObjects.size());
+        System.out.println("My queue for " + linkedListWithObjects.size() + " elements was created in "
+                + timer.fix() + " nanoseconds");
+
+        timer.start();
+        for (int i = 0; i < linkedListWithObjects.size(); i++) {
+            if (queueM.isFull()) break;
+            queueM.insert(linkedListWithObjects.get(i));
+        }
+        System.out.println("Inserting " + queueM.size() + " items into my queue takes " + timer.fix() + " nanoseconds");
+
+        timer.start();
+        queueM.peek();
+        System.out.println("Viewing one item in my queue takes " + timer.fix() + " nanoseconds");
+
+        size = queueM.size();
+        timer.start();
+        while (!queueM.isEmpty()) {
+            queueM.remove();
+        }
+        System.out.println("Deleting " + size + " items from my queue takes " + timer.fix() + " nanoseconds");
+
+        /**
+         * Задание 4.3
+         * На основе данных объектного списка из задания 3.4 реализуйте
+         * простой дек и его базовые методы.
+         * Оцените время выполнения операций с помощью базового метода
+         * System.nanoTime().
+         */
+        System.out.println("\nЗадание 4.3");
+        Deque<Object> deque = new ArrayDeque<>();
+        timer.start();
+        for (int i = 0; i < linkedListWithObjects.size(); i++) {
+            deque.add(linkedListWithObjects.get(i));
+        }
+        deque.addFirst(new Object());
+        deque.addLast(3);
+        System.out.println("Inserting " + deque.size() + " items into dequeue takes " + timer.fix() + " nanoseconds");
+
+        size = deque.size();
+        timer.start();
+        while (!deque.isEmpty()) {
+            System.out.println(deque.poll());
+        }
+        System.out.println("Removing " + size + " items from dequeue takes " + timer.fix() + " nanoseconds");
+
+        deque.add(2);
+
+        deque.addFirst(1);
+        deque.addLast(3);
+
+        timer.start();
+        System.out.println(deque.peekFirst());
+        System.out.println(deque.peekLast());
+        System.out.println("Viewing 2 items in dequeue takes " + timer.fix() + " nanoseconds");
+
+        timer.start();
+        System.out.println(deque.pollFirst());
+        System.out.println(deque.pollLast());
+        System.out.println("Viewing and removing 2 items from dequeue takes " + timer.fix() + " nanoseconds");
+
+        /**
+         * Задание 4.4
+         * Реализуйте приоритетную очередь на основе ссылочных типов данных,
+         * например, integer.
+         * Оцените время выполнения операций с помощью базового метода
+         * System.nanoTime().
+         */
+        System.out.println("\nЗадание 4.4");
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>();
+
+        timer.start();
+        priorityQueue.add(9);
+        priorityQueue.add(4);
+        priorityQueue.add(5);
+        priorityQueue.add(2);
+        priorityQueue.add(7);
+        System.out.println("Adding " + priorityQueue.size() + " items into priority queue takes "
+                + timer.fix() + " nanoseconds");
+
+        size = priorityQueue.size();
+        timer.start();
+        while (!priorityQueue.isEmpty()) System.out.println(priorityQueue.poll());
+        System.out.println("Viewing and removing " + size + " items from priority queue takes "
+                + timer.fix() + " nanoseconds");
+
+        /**
+         * Задание 4.5
+         * На основе данных из задания 4.1 и 4.2, реализуйте стек и очередь на
+         * базе связанного списка.
+         * Оцените время выполнения операций с помощью базового метода
+         * System.nanoTime().
+         */
+        System.out.println("\nЗадание 4.5");
+        StackList<Object> myStackList = new StackList<>();
+        timer.start();
+        size = 0;
+        for (int i = 0; i < linkedListWithObjects.size(); i++) {
+            myStackList.push(linkedListWithObjects.get(i));
+            size++;
+        }
+        System.out.println("Inserting " + size + " items into my stack list takes "
+                + timer.fix() + " nanoseconds");
+
+        timer.start();
+        myStackList.display();
+        System.out.println("Showing " + size + " items from my stack list takes "
+                + timer.fix() + " nanoseconds");
+        timer.start();
+        while (!myStackList.isEmpty()) {
+            System.out.println("Item " + myStackList.pop() + " has been removed from stack list");
+        }
+        System.out.println("Removing " + size + " items from my stack list takes "
+                + timer.fix() + " nanoseconds");
+
+        System.out.println("--------------");
+        MyQueue<Object> myQueue = new MyQueue<>();
+        timer.start();
+        size = 0;
+        for (int i = 0; i < linkedListWithObjects.size(); i++) {
+            myQueue.insert(linkedListWithObjects.get(i));
+            size++;
+        }
+        System.out.println("Inserting " + size + " items into my queue list takes "
+                + timer.fix() + " nanoseconds");
+
+        timer.start();
+        myQueue.display();
+        System.out.println("Showing " + size + " items from my queue list takes "
+                + timer.fix() + " nanoseconds");
+        timer.start();
+        while (!myQueue.isEmpty()) {
+            System.out.println("Item " + myQueue.delete() + " has been removed from queue list");
+        }
+        System.out.println("Removing " + size + " items from my queue list takes "
+                + timer.fix() + " nanoseconds");
+
+
     }
 
     public static class NewType {
@@ -363,6 +549,10 @@ public class AlgorithmsAndDataStructures {
         public T getValue() {
             return link;
         }
+
+        public void display() {
+            System.out.println(link);
+        }
     }
 
     static class SingleLinkedList<T> {
@@ -409,4 +599,199 @@ public class AlgorithmsAndDataStructures {
         }
     }
 
+    static class StackM<T>{
+        private int maxSize;
+        private T[] stack;
+        private int top;
+        private int size;
+
+        public StackM(int size) {
+            maxSize = size;
+            stack = (T[]) new Object[size];
+            top = -1;
+        }
+
+        public void push(T i) {
+            stack[++top] = i;
+        }
+
+        public T pop(){
+            return stack[top--];
+        }
+
+        public T peek(){
+            return stack[top];
+        }
+
+        public boolean isEmpty(){
+            return (top == -1);
+        }
+
+        public boolean isFull(){
+            return (top == maxSize - 1);
+        }
+
+        public int size() {
+            return (top + 1);
+        }
+    }
+
+    static class QueueM<T>{
+        private int maxSize;
+        private T[] queue;
+        private int front;
+        private int rear;
+        private int items;
+
+        public QueueM(int s) {
+            maxSize = s;
+            queue = (T[]) new Object[maxSize];
+            front = 0;
+            rear = -1;
+            items = 0;
+        }
+
+        public void insert(T i) {
+            if (rear == maxSize - 1) rear--;
+            queue[++rear] = i;
+            items++;
+        }
+
+        public T remove() {
+            T temp = queue[front++];
+            if (front == maxSize) front = 0;
+            items--;
+            return temp;
+        }
+
+        public T peek() { return queue[front];}
+
+        public boolean isEmpty() { return (items == 0);}
+
+        public boolean isFull() { return (items == maxSize);}
+
+        public int size() { return  items; }
+
+    }
+
+    static class SinglyLinkedList<T> {
+        public Link first;
+
+        public SinglyLinkedList() {
+            first = null;
+        }
+
+        public boolean isEmpty() {
+            return (first == null);
+        }
+
+        public void insert(T t) {
+            Link<T> link = new Link<>(t);
+            link.next = first;
+            first = link;
+        }
+
+        public Link<T> delete() {
+            Link<T> temp = first;
+            first = first.next;
+            return temp;
+        }
+
+        public void display() {
+            Link<T> current = first;
+            while (current != null) {
+                current.display();
+                current = current.next;
+            }
+
+        }
+    }
+
+    static class StackList<T> {
+        private SinglyLinkedList list;
+
+        public StackList() {
+            list = new SinglyLinkedList<T>();
+        }
+
+        public void push(T t) {
+            list.insert(t);
+        }
+
+        public Link pop() {
+            return list.delete();
+        }
+
+        public boolean isEmpty() {
+            return list.isEmpty();
+        }
+
+        public void display() {
+            list.display();
+        }
+    }
+
+    static class DoublyLinkedList<T> {
+        public Link first;
+        public Link last;
+
+        public DoublyLinkedList() {
+            first = null;
+            last = null;
+        }
+
+        public boolean isEmpty() {
+            return (first == null);
+        }
+
+        public void insert(T t) {
+            Link<T> link = new Link<>(t);
+            if (this.isEmpty())
+                first = link;
+            else
+                last.next = link;
+            last = link;
+        }
+
+        public Link<T> delete() {
+            Link<T> temp = first;
+            if (first.next == null)
+                last = null;
+            first = first.next;
+            return temp;
+        }
+
+        public void display() {
+            Link<T> current = first;
+            while (current != null) {
+                current.display();
+                current = current.next;
+            }
+
+        }
+    }
+
+    static class MyQueue<T> {
+        private DoublyLinkedList queue;
+
+        public MyQueue() {
+            queue = new DoublyLinkedList<T>();
+        }
+
+        public boolean isEmpty() {
+            return queue.isEmpty();
+        }
+
+        public void insert(T t) {
+            queue.insert(t);
+        }
+
+        public Link delete() {
+            return queue.delete();
+        }
+
+        public void display() {
+            queue.display();
+        }
+    }
 }
