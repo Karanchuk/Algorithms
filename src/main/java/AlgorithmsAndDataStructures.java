@@ -431,7 +431,100 @@ public class AlgorithmsAndDataStructures {
         System.out.println("Removing " + size + " items from my queue list takes "
                 + timer.fix() + " nanoseconds");
 
+        /**
+         * Задание 5.1
+         * Приведите пример использования рекурсии.
+         *
+         * В жизни обычную рекурсию можно показать на примере матрешки, а бесконечную – если поставить друг напротив
+         * друга 2 зеркала (навести веб камеру на монитор, на выбор).
+         */
 
+        /**
+         * Задание 5.2
+         * Реализуйте простой пример бесконечной рекурсии и обычной рекурсии с условием для выхода.
+         * Примером самой простой бесконечной рекурсии можно назвать счетчик, который при каждом вызове увеличивает
+         * значение на 1 (не спрашивайте меня зачем, я не знаю). Хотел реализовать рекурсивное вычисление числа пи,
+         * но такое решение простым назвать не получится. Ожидаемо такой метод приведет к переполнению стека, поэтому
+         * я его закомментирую.
+         * Обычная рекурсия – это вычисление факториала.
+         */
+        System.out.println("\nЗадание 5.2");
+        //counter(0);
+        System.out.println(factorial(3));
+
+        /**
+         * Задание 5.3
+         * Приведите пример изображающий стек вызова и стек вызова с рекурсией.
+         *
+         * Стек вызовов можно представить в виде математической игры. Допустим, у нас есть пустая банка от Pringles, куда
+         * мы кладем карточки с заданиями таким образом, чтобы самое первое задание оказалось вверху, а самое последнее
+         * на дне банки. Поочередно доставая карточки мы должны выполнять указанные в них задания, а результат
+         * использовать в качестве входного параметра для последующей карточки. Некоторые карточки не будут требовать
+         * входной результат, в них нужно будет производить вычисления только на основе данных из карточки. Но так или
+         * иначе мы должны доставать карточки в строго обозначенной последовательности и выполнять задание в них.
+         *
+         * Проедлагаю рассмотреть работу стека вызовов с рекурсией на предыдущем примере. Теперь представим, что
+         * карточка с заданием у нас только одна, она должна возвращать результат и находиться вне банки, а в банке
+         * лежит несколько чипсов. Каждый раз, доставая и съедая один чипс, мы должны выполнить задание на карточке и
+         * сохранить результат для дальнейшего использования в очередной итерации задания. Количество чипсов в банке
+         * будет определять количество выполнений задания на карточке.
+         */
+
+        /**
+         * Задание 5.4
+         * Реализуйте простой алгоритм использующий цикл и простой алгоритм использующий рекурсию.
+         * Оцените два алгоритма с помощью базового метода System.nanoTime().
+         */
+        System.out.println("\nЗадание 5.4");
+
+        timer.start();
+        int n = 100;
+        int factorial = 1;
+        for (int i = 1; i <= n; i++) {
+            factorial = factorial * i;
+        }
+        System.out.println("Loop for calculating " + n + "! is executed "
+                + timer.fix() + " nanoseconds");
+
+        timer.start();
+        factorial(n);
+        System.out.println("Recursive call to calculate " + n + "! is executed " + timer.fix() + " nanoseconds");
+
+        /**
+         * Задание 5.5
+         * Реализуйте алгоритм двоичного рекурсивного поиска на основе массива из задания 2.1.
+         * Оцените алгоритм двоичного рекурсивного поиска с помощью базового метода System.nanoTime() и сравните с обычным двоичным поиском.
+         */
+        System.out.println("\nЗадание 5.5");
+        intsCopy = Arrays.copyOf(ints, ints.length);
+        Arrays.sort(intsCopy);
+        System.out.println(Arrays.toString(intsCopy));
+        desiredValue = intsCopy[randomizer.nextInt(30)];
+        timer.start();
+        System.out.println("Position is "
+                + recursiveBinaryFind(desiredValue, 0, intsCopy.length - 1, intsCopy));
+        System.out.println("Recursive binary find for array from " + intsCopy.length + " elements took "
+                + timer.fix() + " nanoseconds");
+
+        timer.start();
+        binaryFind(intsCopy, desiredValue, timer);
+        System.out.println("Binary find took " + timer.fix() + " nanoseconds");
+
+        /**
+         * Задание 5.6
+         * На основе массива из задания 2.1 реализуйте алгоритм сортировки слиянием.
+         * Оцените алгоритм сортировки слиянием с помощью базового метода System.nanoTime() и сравните с сортировкой методом sort().
+         */
+        System.out.println("\nЗадание 5.6");
+        intsCopy = Arrays.copyOf(ints, ints.length);
+        int[] intsCopy2 = Arrays.stream(intsCopy).mapToInt(Integer::intValue).toArray();
+        timer.start();
+        sortMerge(intsCopy2);
+        System.out.println("Merge sort algorithm ran in " + timer.fix() + " nanoseconds");
+        intsCopy2 = Arrays.stream(intsCopy).mapToInt(Integer::intValue).toArray();
+        timer.start();
+        Arrays.sort(intsCopy2);
+        System.out.println("sort() method ran in " + timer.fix() + " nanoseconds");
     }
 
     public static class NewType {
@@ -793,5 +886,74 @@ public class AlgorithmsAndDataStructures {
         public void display() {
             queue.display();
         }
+    }
+
+    public static int factorial(int i) {
+        if (i == 1 || i == 0) {
+            return 1;
+        }
+        return factorial(i - 1) * i;
+    }
+
+    public static int counter(int i) {
+        return counter( i + 1);
+    }
+
+    public static int recursiveBinaryFind(int searchKey, int low, int high, Integer arr[]) {
+
+        if (low > high)
+            return arr.length;
+
+        int mid = (low + high) / 2;
+
+        if (arr[mid] == searchKey)
+            return recursiveBinaryFind(searchKey, low + 1, high ,arr);
+        else
+            return recursiveBinaryFind(searchKey, low, high - 1, arr);
+    }
+
+    public static int binaryFind(Integer[] intsCopy, int desiredValue, Timer timer) {
+        int firstIndex = 0;
+        int lastIndex = intsCopy.length - 1;
+        while (true) {
+            timer.increaseCounter();
+            int middleIndex = (lastIndex + firstIndex) / 2;
+            if (intsCopy[middleIndex] == desiredValue) {
+                System.out.println(desiredValue + " contains in " + middleIndex + " index and found for "
+                        + timer.getCounter() + " iterations");
+                return middleIndex;
+            } else if (intsCopy[middleIndex] < desiredValue) {
+                firstIndex = middleIndex + 1;
+            } else {
+                lastIndex = middleIndex - 1;
+            }
+        }
+    }
+
+    public static int[] sortMerge(int[] arr) {
+        int len = arr.length;
+        if (len < 2) return arr;
+        int middle = len / 2;
+        return merge(sortMerge(Arrays.copyOfRange(arr, 0, middle)),
+                sortMerge(Arrays.copyOfRange(arr, middle, len)));
+    }
+
+    public static int[] merge(int[] a, int[] b) {
+        int[] result = new int[a.length + b.length];
+        int aIndex = 0;
+        int bIndex = 0;
+
+        for (int i = 0; i < result.length; i++) {
+            result[i] = a[aIndex] < b[bIndex] ? a[aIndex] : b[bIndex];
+            if (aIndex == a.length) {
+                System.arraycopy(b, bIndex, result, ++i, b.length - bIndex);
+                break;
+            }
+            if (bIndex == b.length) {
+                System.arraycopy(a, aIndex, result, ++i, a.length - aIndex);
+                break;
+            }
+        }
+        return result;
     }
 }
