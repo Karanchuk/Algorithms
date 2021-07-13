@@ -1,3 +1,4 @@
+import javax.imageio.plugins.jpeg.JPEGImageReadParam;
 import java.util.*;
 
 public class AlgorithmsAndDataStructures {
@@ -525,6 +526,80 @@ public class AlgorithmsAndDataStructures {
         timer.start();
         Arrays.sort(intsCopy2);
         System.out.println("sort() method ran in " + timer.fix() + " nanoseconds");
+
+        /**
+         * Задания 6.1
+         * Приведите пример использования древовидной структуры.
+         *
+         * Древовидную структуру можно использовать для описания любой иерархии, где есть подчиненные и руководители,
+         * в генеалогии для обозначения предков и потомков и много где еще.
+         */
+
+        /**
+         * Задание 6.2
+         * Реализуйте класс узла дерева и базовый шаблон дерева с базовыми
+         * методами.
+         * Задание 6.3
+         * Реализуйте методы поиска и вставки узла в дерево.
+         * Задание 6.4
+         * Реализуйте базовые методы обхода дерева и метода дисплей.
+         * Реализуйте поиск максимума и минимума.
+         * Задание 6.5
+         * Реализуйте метод удаления узла и выполните оценку времени базовых
+         * методов дерева с помощью System.nanoTime().
+         */
+        System.out.println("\nЗадание 6.2-6.5");
+        Tree theTree = new Tree();
+
+        timer.start();
+        theTree.insert(new Person(4, "Ivan", 35));
+        System.out.println("Вставка в дерево занимает " + timer.fix() + " наносекунд");
+        theTree.insert(new Person(2, "Ivan1", 78));
+        theTree.insert(new Person(3, "Ivan2", 24));
+        theTree.insert(new Person(5, "Ivan3", 21));
+
+        timer.start();
+        theTree.max().display();
+        System.out.println("Поиск максимального значения в дереве занимает " + timer.fix() + " наносекунд");
+        timer.start();
+        theTree.min().display();
+        System.out.println("Поиск минимального значения в дереве занимает " + timer.fix() + " наносекунд");
+
+        timer.start();
+        theTree.find(3).display();
+        System.out.println("Поиск произвольного значения в дереве занимает " + timer.fix() + " наносекунд");
+
+        timer.start();
+        theTree.delete(2);
+        System.out.println("Удаление из дерева занимает " + timer.fix() + " наносекунд");
+
+        timer.start();
+        theTree.displayTree();
+        System.out.println("Вывод дерева занимает " + timer.fix() + " наносекунд");
+
+        /**
+         * Задание 6.6
+         * Реализуйте на основе массива из задания 2.1 алгоритм пирамидальной
+         * сортировки с реализацией бинарной пирамиды.
+         * Выполните оценку алгоритма пирамидальной сортировки с помощью
+         * System.nanoTime() и сравните с предыдущими алгоритмами сортировки.
+         */
+        System.out.println("\nЗадание 6.6");
+
+        timer.start();
+        HeapSort arrSort = new HeapSort();
+        arrSort.sort(ints);
+        System.out.println("Пирамидальная сортировка занимает " + timer.fix() + " наносекунд");
+
+
+        /**
+         * Задание 6.7
+         * Приведите пример сбалансированного дерева и его применения.
+         *
+         * Сбалансированным называется такое дерево, где для каждой его вершины количество вершин в правом и левом
+         * поддеревьях различается не более чем на 1.
+         */
+
     }
 
     public static class NewType {
@@ -955,5 +1030,252 @@ public class AlgorithmsAndDataStructures {
             }
         }
         return result;
+    }
+
+    static class Person {
+        public String name;
+        public int id;
+        public  int age;
+
+        public Person(int id, String name, int age) {
+            this.name = name;
+            this.id = id;
+            this.age = age;
+        }
+    }
+
+    static class Node {
+        public Person person;
+        public Node leftChild;
+        public Node rightChild;
+
+        public void display() {
+            System.out.println("Name: " + person.name + ", age: " + person.age);
+        }
+    }
+
+    static class Tree {
+        private Node root;
+
+        public void insert(Person person){
+            Node node = new Node();
+            node.person = person;
+
+            if (root == null)
+                root = node;
+            else {
+                Node current = root;
+                Node parent;
+
+                while (true) {
+                    parent = current;
+                    if (person.id < current.person.id) {
+                        current = current.leftChild;
+                        if (current == null) {
+                            parent.leftChild = node;
+                            return;
+                        }
+                    } else {
+                        current = current.rightChild;
+                        if (current == null) {
+                            parent.rightChild = node;
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        public Node find (int key) {
+            Node current = root;
+
+            while (current.person.id != key) {
+                if (key < current.person.id)
+                    current = current.leftChild;
+                else
+                    current = current.rightChild;
+                if (current == null)
+                    return null;
+            }
+            return current;
+        }
+
+        private void preOrder (Node rootNode) {
+            if (rootNode != null) {
+                rootNode.display();
+                preOrder(rootNode.leftChild);
+                preOrder(rootNode.rightChild);
+            }
+        }
+
+        private void postOrder (Node rootNode) {
+            if (rootNode != null) {
+                preOrder(rootNode.leftChild);
+                preOrder(rootNode.rightChild);
+                rootNode.display();
+            }
+        }
+
+        private void inOrder (Node rootNode) {
+            if (rootNode != null) {
+                inOrder(rootNode.leftChild);
+                rootNode.display();
+                inOrder(rootNode.rightChild);
+            }
+        }
+
+        public Node min() {
+            Node current, last = null;
+            current = root;
+            while (current != null) {
+                last = current;
+                current = current.leftChild;
+            }
+            return last;
+        }
+
+        public Node max() {
+            Node current, last = null;
+            current = root;
+            while (current != null) {
+                last = current;
+                current = current.rightChild;
+            }
+            return last;
+        }
+
+        public boolean delete (int id) {
+            Node current = root;
+            Node parent = root;
+
+            boolean isLeftChild = true;
+
+            while (current.person.id != id) {
+                parent = current;
+                if (id < current.person.id) {
+                    isLeftChild = true;
+                    current = current.leftChild;
+                } else {
+                    isLeftChild = false;
+                    current = current.rightChild;
+                }
+                if (current == null)
+                    return false;
+            }
+
+            if (current.leftChild == null && current.rightChild == null) {
+                if (current == root)
+                    root = null;
+                else if (isLeftChild)
+                    parent.leftChild = null;
+                else
+                    parent.rightChild = null;
+
+            } else if (current.rightChild == null) {
+                if (current == null)
+                    root = current.leftChild;
+                else  if (isLeftChild)
+                    parent.leftChild = current.leftChild;
+                else
+                    parent.rightChild = current.leftChild;
+            } else if (current.leftChild == null) {
+                if (current == null)
+                    root = current.rightChild;
+                else if (isLeftChild)
+                    parent.leftChild = current.rightChild;
+                else
+                    parent.rightChild = current.rightChild;
+            } else {
+                Node successor = getSuccessor(current);
+                if (current == root)
+                    root = successor;
+                else if (isLeftChild)
+                    parent.leftChild = successor;
+                else
+                    parent.rightChild = successor;
+                successor.leftChild = current.leftChild;
+            }
+            return true;
+        }
+
+        public Node getSuccessor(Node node) {
+            Node successorParent = node;
+            Node successor = node;
+            Node current = node.rightChild;
+
+            while (current != null) {
+                successorParent = successor;
+                successor = current;
+                current = current.leftChild;
+            }
+
+            if (successor != node.rightChild) {
+                successorParent.leftChild = successor.rightChild;
+                successor.rightChild = node.rightChild;
+            }
+            return successor;
+        }
+
+        public void displayTree () {
+            Node current = root;
+            System.out.println("Симметричный");
+            inOrder(root);
+            System.out.println("Прямой");
+            preOrder(root);
+            System.out.println("Обратный");
+            postOrder(current);
+        }
+    }
+
+    static class HeapSort {
+
+        private static int heapSize;
+
+        public static void sort (Integer[] a) {
+            buildHeap(a);
+            while (heapSize > 1) {
+                swap(a, 0, heapSize - 1);
+                heapSize--;
+                heapify(a, 0);
+            }
+        }
+
+        private static void buildHeap(Integer[] a) {
+            heapSize = a.length;
+            for (int i = a.length / 2; i >= 0 ; i--) {
+                heapify(a, i);
+
+            }
+        }
+
+        private static void heapify(Integer[] a, int i) {
+            Integer l = left(i);
+            Integer r = right(i);
+            Integer largest = i;
+            if (l <heapSize && a[i] < a[l]) {
+                largest = l;
+            }
+            if (r <heapSize && a[i] < a[r]) {
+                largest = r;
+            }
+            if (i != largest) {
+                swap(a, i, largest);
+                heapify(a, largest);
+            }
+        }
+
+        private static Integer right (int i) {
+            return 2 * i + 2;
+        }
+
+        private static Integer left (int i) {
+            return 2 * i + 1;
+        }
+
+        private static void swap (Integer[] a, int i, int j) {
+            Integer temp = a[i];
+            a[i] = a[j];
+            a[j] = temp;
+        }
     }
 }
