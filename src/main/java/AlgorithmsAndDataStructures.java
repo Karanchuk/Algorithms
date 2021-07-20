@@ -656,6 +656,66 @@ public class AlgorithmsAndDataStructures {
         graph.BFS(0);
         System.out.println("Обход 2 в ширину занимает " + timer.fix() + " наносекунд");
 
+        /**
+         * Задание 8.1
+         * Приведите пример использование хеш-таблиц.
+         *
+         * Хеш-таблицы обычно используются для реализации ассоциативных массивов, когда индексом сложного объекта в
+         * массиве выступает его хеш-функция.
+         */
+
+        /**
+         * Задание 8.2
+         * Приведите примеры ключей и коллизий.
+         *
+         * Ключем называется исходные данные, подлежащие преобразованию через хеш-функцию. Коллизия – это когда
+         * хеш-функция на несколько разных ключей возвращает одинаковую хеш-сумму.
+         */
+
+        /**
+         * Задание 8.3
+         * Приведите примеры популярных и эффективных хеш-функций.
+         *
+         * Эффективная хеш-функция должна удовлетворять нескольким требованиям: не создавать хеш-таблицу избыточного
+         * размера и при этом минимизировать количество коллизий. Как вариант использовать такую хеш-функцию, которая
+         * допускает хранение 2n элементов в хеш-таблице, где n – количество возможных ключей.
+         */
+
+        /**
+         * Задание 8.4
+         * На основе данных массива из задания 2.3 реализуйте хеш-таблицу с
+         * помощью открытой адресации, а конкретнее метода линейного пробирования
+         */
+        System.out.println("\nЗадание 8.4");
+        bigIntsCopy = Arrays.copyOf(bigInts, bigInts.length);
+
+        HashTable hTable = new HashTable(bigIntsCopy.length * 2, false);
+
+        for (int i = 0; i < bigIntsCopy.length; i++) {
+            Item aDataItem = new Item(bigIntsCopy[i]);
+            hTable.insert(aDataItem);
+        }
+
+        hTable.display();
+
+        /**
+         * Задание 8.5
+         * Перестройте программный код задания 8.4 из алгоритма линейного
+         * пробирования в алгоритм двойного хеширования.
+         * Сравните отличительные черты двух алгоритмов.
+         */
+        System.out.println("\nЗадание 8.5");
+        bigIntsCopy = Arrays.copyOf(bigInts, bigInts.length);
+
+        hTable = new HashTable(bigIntsCopy.length * 2, true);
+
+        for (int i = 0; i < bigIntsCopy.length; i++) {
+            Item aDataItem = new Item(bigIntsCopy[i]);
+            hTable.insert(aDataItem);
+        }
+
+        hTable.display();
+
     }
 
     public static class NewType {
@@ -1496,6 +1556,109 @@ public class AlgorithmsAndDataStructures {
             return stackArr[top];
         }
 
+    }
+
+    static class Item {
+        private int data;
+
+        public Item(int data) {
+            this.data = data;
+        }
+
+        public int getKey() {
+            return data;
+        }
+    }
+
+    static class HashTable {
+        private Item[] hashArr;
+        private int arrSize;
+        private Item nonItem;
+        boolean doubleHash;
+
+        public HashTable(int size, boolean doubleHash) {
+            arrSize = size;
+            hashArr = new Item[arrSize];
+            nonItem = new Item(-1);
+            this.doubleHash = doubleHash;
+        }
+
+        public void display() {
+            for (int i = 0; i < arrSize; i++) {
+                if (hashArr[i] != null)
+                    System.out.println(hashArr[i].getKey());
+                else
+                    System.out.println("***");
+            }
+        }
+
+        public int hashFunc(int key) {
+            return key % arrSize;
+        }
+
+        public int hashFuncDouble(int key) {
+            return 5 - key % 5;
+        }
+
+        public void insert(Item item) {
+            int key = item.getKey();
+            int hashVal = hashFunc(key);
+            int stepSize = hashFuncDouble(key);
+            while (hashArr[hashVal] != null && hashArr[hashVal].getKey() != -1) {
+                if (doubleHash)
+                    hashVal += stepSize;
+                else
+                    ++ hashVal;
+                hashVal %= arrSize;
+            }
+            hashArr[hashVal] = item;
+
+        }
+
+        public Item delete(int key) {
+            int hashVal = hashFunc(key);
+            int stepSize = hashFuncDouble(key);
+            while (hashArr[hashVal] != null) {
+                if (hashArr[hashVal].getKey() == key) {
+                    Item temp = hashArr[hashVal];
+                    hashArr[hashVal] = nonItem;
+                    return temp;
+                }
+                if (doubleHash)
+                    ++hashVal;
+                else
+                    hashVal += stepSize;
+                hashVal %= arrSize;
+            }
+            return null;
+        }
+
+        public Item find(int key) {
+            int hashVal = hashFunc(key);
+            int stepSize = hashFuncDouble(key);
+            while (hashArr[hashVal].getKey() == key)
+                return hashArr[hashVal];
+            ++ hashVal;
+            if (doubleHash)
+                hashVal += stepSize;
+            else
+                hashVal %= arrSize;
+            return null;
+        }
+
+        private int getPrime(int min) {
+            for (int i = min + 1; true; i++) {
+                if (isPrime(i))
+                    return i;
+            }
+        }
+
+        private boolean isPrime(int n) {
+            for (int j = 2; (j * j <= n); j++)
+                if (n * j == 0)
+                    return false;
+            return true;
+        }
     }
 
 }
